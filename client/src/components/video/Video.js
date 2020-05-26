@@ -114,15 +114,14 @@ const Video = (props) => {
       })
     );
   };
-  const currentStatus = () => {
-    return JSON.stringify({
+  const currentStatus = () =>
+    JSON.stringify({
       event: "sync",
       action: "currenttime",
       videoID: videoID,
       currentTime: player.getCurrentTime(),
       timestamp: Date.now(),
     });
-  };
 
   const changeState = (triggered) => {
     if (triggered === 1) sync();
