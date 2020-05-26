@@ -49,13 +49,9 @@ Please contribute! This project needs scalability and sync improvements to allow
 
 If you have any questions at all, please feel free to contact me on [linkedin](https://www.linkedin.com/in/aspyn-palatnick-577270131/) and I'll get back to you as soon as possible.
 
-### Inspiration
-
-Project inspired by [@YasserYka](https://github.com/YasserYka/YT-API).
-
 ### Credit
 
-The overwhelming majority of this was built by [@filahf](https://www.filipahfelt.se/), and can be seen on his youtube sync website https://wevid.online/. I (@stuckinaboot) just simplified the code to make using this within an iframe trivial.
+The overwhelming majority of this was built by [@filahf](https://www.filipahfelt.se/), and can be seen on his youtube sync website https://wevid.online/. I (@stuckinaboot) just simplified the code to make using this within an iframe trivial. Some core youtube sync ideas were used from [@YasserYka](https://github.com/YasserYka/YT-API).
 
 ### Contributors
 
