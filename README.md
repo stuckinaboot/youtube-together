@@ -4,15 +4,11 @@
 
 > Host the server and embed the youtube sync session in an iframe, allowing you to use this out of the box on any website for any use case
 
-### Technologies
+### Usage from NPM
 
-- React.js
-- CSS
-- Node.js
-- Websockets
-- Express
+Install youtube-together with `npm install youtube-together --save`. Start youtube-together server with `npm start`. Scroll down to _How to_ to get started creating your first youtube-together session.
 
-### Setup
+### Setup from GitHub repo
 
 ```
 cd client
