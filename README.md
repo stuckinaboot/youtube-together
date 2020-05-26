@@ -41,7 +41,7 @@ If you notice any room for improvement, create a GitHub issue with the title bei
 
 #### Contributing
 
-Thank you for deciding to contribute! Pick a GitHub issue that you would like to address (or add your own), and then assign yourself to that issue. Then, fork the repo and add any changes you would like to make to that fork. Currently, we don't have tests in place so please be sure to test various scenarios locally before deciding your changes are ready to submit. When you would like to submit your changes for review, create a pull request and I will review/test it myself as soon as possible.
+Thank you for deciding to contribute! Pick a GitHub issue that you would like to address (or add your own), and then assign yourself to that issue. Then, fork the repo and add any changes you would like to make to that fork. Currently, we don't have tests in place so please be sure to test various scenarios locally before deciding your changes are ready to submit. When you would like to submit your changes for review, create a pull request, list the specific changes that you made, and I will review/test it myself as soon as possible.
 
 **The main two files that are related to youtube sync and the scalability of the end-to-end process are `client/Video.js` and `server/server.js`**.
 
@@ -49,14 +49,10 @@ Please contribute! This project needs scalability and sync improvements to allow
 
 If you have any questions at all, please feel free to contact me on [linkedin](https://www.linkedin.com/in/aspyn-palatnick-577270131/) and I'll get back to you as soon as possible.
 
-### Inspiration
-
-Project inspired by [@YasserYka](https://github.com/YasserYka/YT-API).
-
-### Credit
-
-The overwhelming majority of this was built by [@filahf](https://www.filipahfelt.se/), and can be seen on his youtube sync website https://wevid.online/. I (@stuckinaboot) just simplified the code to make using this within an iframe trivial.
-
 ### Contributors
 
 [@filahf](https://github.com/filahf) [@stuckinaboot](https://github.com/stuckinaboot)
+
+### Credit for Project Start
+
+The overwhelming majority of this was built by [@filahf](https://www.filipahfelt.se/), and can be seen on his youtube sync website https://wevid.online/. I (@stuckinaboot) just simplified the code to make using this within an iframe trivial. Some core youtube sync ideas were used from [@YasserYka](https://github.com/YasserYka/YT-API).
