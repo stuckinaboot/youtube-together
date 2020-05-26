@@ -33,7 +33,6 @@ const Video = (props) => {
   useEffect(() => {
     props.socket.addEventListener("message", (event) => {
       let data = JSON.parse(event.data);
-
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
         join(data);
@@ -77,7 +76,6 @@ const Video = (props) => {
 
   const onPlayerReady = (event) => {
     event.target.playVideo();
-
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
       return;
@@ -96,9 +94,7 @@ const Video = (props) => {
     }
   };
 
-  const onStateChange = (event) => {
-    changeState(event.data);
-  };
+  const onStateChange = (event) => changeState(event.data);
   const sync = () => props.socket.send(currentStatus());
   const seekTo = (second) => player.seekTo(second, true);
   const pauseVideo = () => player.pauseVideo();
