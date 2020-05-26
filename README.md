@@ -4,11 +4,14 @@
 
 > Host the server and embed the youtube sync session in an iframe, allowing you to use this out of the box on any website for any use case
 
+### Usage from NPM
+
+Install youtube-together with `npm install youtube-together --save`. Run youtube-together with `npm start`.
+
 ### Technologies
 
-- React.js
-- CSS
-- Node.js
+- React
+- Node
 - Websockets
 - Express
 
