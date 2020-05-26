@@ -14,8 +14,10 @@ const Video = (props) => {
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
-        mute: props.leader ? 0 : 1,
-        autoplay: 0,
+        // Mute the user because if the user is unmuted,
+        // we can't autoplay the video for that user
+        // https://stackoverflow.com/questions/40685142/youtube-autoplay-not-working
+        mute: 1,
       },
       events: {
         onReady: onPlayerReady,
@@ -62,6 +64,7 @@ const Video = (props) => {
 
   const updateVideo = (data) => {
     let videoStatus = player.getPlayerState();
+
     if (
       data.action === "currenttime" &&
       (videoStatus === 2 || videoStatus === -1)
@@ -77,6 +80,7 @@ const Video = (props) => {
       // Implies we are first user to join
       return;
     }
+
     // The time we want to be at is the time in video
     // when currentTime occurred plus the duration after currentTime,
     // in seconds
