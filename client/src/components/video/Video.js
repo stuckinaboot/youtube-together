@@ -14,8 +14,7 @@ const Video = (props) => {
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
-        mute: props.leader ? 0 : 1,
-        autoplay: 0,
+        mute: 1,
       },
       events: {
         onReady: onPlayerReady,
@@ -31,6 +30,7 @@ const Video = (props) => {
   useEffect(() => {
     props.socket.addEventListener("message", (event) => {
       let data = JSON.parse(event.data);
+
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
         join(data);
@@ -62,6 +62,7 @@ const Video = (props) => {
 
   const updateVideo = (data) => {
     let videoStatus = player.getPlayerState();
+
     if (
       data.action === "currenttime" &&
       (videoStatus === 2 || videoStatus === -1)
@@ -73,10 +74,12 @@ const Video = (props) => {
 
   const onPlayerReady = (event) => {
     event.target.playVideo();
+
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
       return;
     }
+
     // The time we want to be at is the time in video
     // when currentTime occurred plus the duration after currentTime,
     // in seconds
@@ -90,7 +93,9 @@ const Video = (props) => {
     }
   };
 
-  const onStateChange = (event) => changeState(event.data);
+  const onStateChange = (event) => {
+    changeState(event.data);
+  };
   const sync = () => props.socket.send(currentStatus());
   const seekTo = (second) => player.seekTo(second, true);
   const pauseVideo = () => player.pauseVideo();
@@ -106,14 +111,15 @@ const Video = (props) => {
       })
     );
   };
-  const currentStatus = () =>
-    JSON.stringify({
+  const currentStatus = () => {
+    return JSON.stringify({
       event: "sync",
       action: "currenttime",
       videoID: videoID,
       currentTime: player.getCurrentTime(),
       timestamp: Date.now(),
     });
+  };
 
   const changeState = (triggered) => {
     if (triggered === 1) sync();
