@@ -6,16 +6,9 @@
 
 ### Usage from NPM
 
-Install youtube-together with `npm install youtube-together --save`. Run youtube-together with `npm start`.
+Install youtube-together with `npm install youtube-together --save`. Start youtube-together server with `npm start`. Scroll down to _How to_ to get started creating your first youtube-together session.
 
-### Technologies
-
-- React
-- Node
-- Websockets
-- Express
-
-### Setup
+### Setup from GitHub repo
 
 ```
 cd client
