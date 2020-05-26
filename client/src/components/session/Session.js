@@ -8,7 +8,7 @@ const config = getConfig();
 
 const Session = (props) => {
   const history = useHistory();
-  const url = `ws://${config.sockets.host}:${config.sockets.port}/`;
+  const url = `ws://${window.location.hostname}:${config.sockets.port}/`;
   const socket = new WebSocket(url);
   let sessID = props.sessionID;
 
