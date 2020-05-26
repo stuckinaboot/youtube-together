@@ -1,0 +1,6 @@
+{
+  "sockets": {
+    "host": "localhost",
+    "port": 8088
+  }
+}
