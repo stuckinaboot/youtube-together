@@ -4,7 +4,7 @@
   "description": "Embed youtube-together sessions in any iframe to allow watching youtube videos together with friends located anywhere",
   "main": "server/server.js",
   "scripts": {
-    "start": "cd server && node server.js",
+    "start": "npm run-script build-prod && cd server && node server.js",
     "start-client": "cd client && react-scripts start",
     "build": "cd client && REACT_APP_BUILD_TYPE=development react-scripts build",
     "build-prod": "cd client && REACT_APP_BUILD_TYPE=production react-scripts build",
