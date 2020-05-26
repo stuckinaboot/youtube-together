@@ -14,8 +14,8 @@ const Video = (props) => {
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
-        // Mute all users because if any user is unmuted,
-        // we can't autoplay the video
+        // Mute the user because if the user is unmuted,
+        // we can't autoplay the video for that user
         // https://stackoverflow.com/questions/40685142/youtube-autoplay-not-working
         mute: 1,
       },
