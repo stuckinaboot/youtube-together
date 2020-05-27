@@ -21,11 +21,11 @@ yarn start
 
 ### How to
 
-To create a new youtube sync session, open your browser and visit `localhost:8088/start/choose_session_id/encoded_youtube_url`, where `choose_session_id` is any alphanumeric string and `encoded_youtube_url` is the link to a youtube video encoded using encodeURIComponent.
+To create a new youtube sync session, open your browser and visit `localhost:8000/start/choose_session_id/encoded_youtube_url`, where `choose_session_id` is any alphanumeric string and `encoded_youtube_url` is the link to a youtube video encoded using encodeURIComponent.
 
-Example of creating a new session with session id `abc123` and youtube url `https://www.youtube.com/watch?v=yB1xfGv_PY8`: `localhost:8088/start/abc123/https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjEJUa64NU7s`
+Example of creating a new session with session id `abc123` and youtube url `https://www.youtube.com/watch?v=yB1xfGv_PY8`: `localhost:8000/start/abc123/https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DjEJUa64NU7s`
 
-Then, to join somebody else's existing youtube sync session, visit `localhost:8088/watch/abc123` in a new browser.
+Then, to join somebody else's existing youtube sync session, visit `localhost:8000/watch/abc123` in a new browser.
 
 ### Contributing
 
