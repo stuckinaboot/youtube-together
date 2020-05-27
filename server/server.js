@@ -41,7 +41,7 @@ module.exports = function startYoutubeTogetherServer(httpsConfig) {
   app.get("/*", (_, res) => res.sendFile(INDEX_HTML_PATH));
   server.on("request", app);
 
-  server.listen(PORT, () => {
+  const serverListener = server.listen(PORT, () => {
     console.log(`Listening on ${PORT}!`);
   });
 
@@ -133,4 +133,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig) {
       latestEvent: null,
     });
   };
+
+  return serverListener;
 };

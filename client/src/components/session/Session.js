@@ -5,7 +5,10 @@ import Video from "../video/Video";
 
 const Session = (props) => {
   const history = useHistory();
-  const url = `ws://${window.location.hostname}:${window.location.port}/`;
+  const isHttps = window.location.protocol.startsWith("https:");
+  const url = `${isHttps ? "wss" : "ws"}://${window.location.hostname}:${
+    window.location.port
+  }/`;
   const socket = new WebSocket(url);
   let sessID = props.sessionID;
 
