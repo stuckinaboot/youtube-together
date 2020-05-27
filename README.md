@@ -35,7 +35,7 @@ Then, to join somebody else's existing youtube sync session, visit `localhost:80
 
 If you notice any bugs, create a GitHub issue with the title being a very short summary of the problem, e.g. `Sync not working on start`, and the description being the _exact_ steps to reproduce the issue. If we do not have the _exact_ steps, we can't figure out what's wrong and can't fix it.
 
-If you notice any room for improvement, create a GitHub issue with the title being a very short summary of the improvement, e.g. `Improve session scalability`, and the description being the improvement you would like to see made. Feel free to add hints on the approach you woul take.
+If you notice any room for improvement, create a GitHub issue with the title being a very short summary of the improvement, e.g. `Improve session scalability`, and the description being the improvement you would like to see made. Feel free to add hints on the approach you would take.
 
 #### Contributing
 
