@@ -13,7 +13,7 @@ const INDEX_HTML_PATH = path.join(BUILD_PATH, "index.html");
 
 app.use(express.static(path.join(__dirname, "../client", "build")));
 
-const PORT = process.env.PORT || 8088;
+const PORT = process.env.PORT || 8000;
 
 const server = require("http").createServer();
 const WebSocket = require("ws").Server;
