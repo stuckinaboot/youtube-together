@@ -8,6 +8,8 @@
 
 Install youtube-together with `npm install youtube-together --save`. Start youtube-together server with `cd node_modules/youtube-together && npm start`. Scroll down to _How to_ to get started creating your first youtube-together session.
 
+To use a port other than the default server port (8000), run `cd node_modules/youtube-together && PORT=8123 npm start`, 8123 can be replaced by whatever port your heart desires.
+
 ### Setup from GitHub repo
 
 ```
