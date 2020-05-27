@@ -4,7 +4,7 @@
   "description": "Embed youtube-together sessions in any iframe to allow watching youtube videos together with friends located anywhere",
   "main": "server/server.js",
   "scripts": {
-    "start": "npm run-script build-prod && cd server && node server.js",
+    "start": "npm run-script build-prod && cd server && node startHttp.js",
     "start-client": "cd client && react-scripts start",
     "build": "cd client && REACT_APP_BUILD_TYPE=development react-scripts build",
     "build-prod": "cd client && REACT_APP_BUILD_TYPE=production react-scripts build",
@@ -35,6 +35,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "https": "^1.0.0",
+    "morgan": "^1.9.1",
     "node-sass": "^4.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -42,10 +47,6 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-spring": "^8.0.27",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "morgan": "^1.9.1",
     "ws": "^7.2.5"
   },
   "devDependencies": {
