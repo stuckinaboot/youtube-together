@@ -4,7 +4,7 @@
 
 > Host the server and embed the youtube sync session in an iframe, allowing you to use this out of the box on any website for any use case
 
-## Usage from NPM
+## Usage from NPM ⚡
 
 ### Quickstart
 
@@ -52,7 +52,7 @@ startServer({
 }, 443);
 ```
 
-## Setup from GitHub repo
+## Setup from GitHub repo 🖥️
 
 ```
 cd client
@@ -63,7 +63,7 @@ yarn
 yarn start
 ```
 
-## How to
+## How to 📜
 
 To create a new youtube sync session, open your browser and visit `localhost:8000/start/choose_session_id/encoded_youtube_url`, where `choose_session_id` is any alphanumeric string and `encoded_youtube_url` is the link to a youtube video encoded using `encodeURIComponent`.
 
@@ -73,7 +73,7 @@ Then, to join somebody else's existing youtube sync session, visit `localhost:80
 
 All youtube-together session urls can easily be embedded in an iframe to easily allow users to watch youtube videos together on your platform.
 
-## Contributing
+## Contributing ❤️
 
 ### Submitting Issues
 
@@ -91,7 +91,7 @@ Please contribute! This project needs scalability and sync improvements to allow
 
 If you have any questions at all, please feel free to contact me on [linkedin](https://www.linkedin.com/in/aspyn-palatnick-577270131/) and I'll get back to you as soon as possible.
 
-## Contributors
+## Contributors 🔥
 
 [@filahf](https://github.com/filahf) [@stuckinaboot](https://github.com/stuckinaboot)
 
