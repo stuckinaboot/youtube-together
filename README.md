@@ -14,14 +14,14 @@ To use a port other than the default server port (8000), run `cd node_modules/yo
 
 ### Integrating the youtube-together server into your code
 
-To start the `youtube-together` server via code, simply do the following:
+To start the `youtube-together` server:
 
 ```
 const startServer = require("youtube-together");
 startServer();
 ```
 
-If you would like to start `youtube-together` as an https server, do the following:
+To start `youtube-together` as an https server:
 
 ```
 const startServer = require("youtube-together");
@@ -30,6 +30,26 @@ startServer({
   certFilePath: "your_ssl_certificate.crt",
   caFilePath: "your_ssl_ca_bundle.crt",
 });
+```
+
+#### Choose a port
+
+To start the `youtube-together` server on a specific port:
+
+```
+const startServer = require("youtube-together");
+startServer(undefined, 443);
+```
+
+To start the `youtube-together` https server on a specific port:
+
+```
+const startServer = require("youtube-together");
+startServer({
+  keyFilePath: "your_ssl_private.key",
+  certFilePath: "your_ssl_certificate.crt",
+  caFilePath: "your_ssl_ca_bundle.crt",
+}, 443);
 ```
 
 ## Setup from GitHub repo
@@ -43,7 +63,7 @@ yarn
 yarn start
 ```
 
-### How to
+## How to
 
 To create a new youtube sync session, open your browser and visit `localhost:8000/start/choose_session_id/encoded_youtube_url`, where `choose_session_id` is any alphanumeric string and `encoded_youtube_url` is the link to a youtube video encoded using `encodeURIComponent`.
 
@@ -53,15 +73,15 @@ Then, to join somebody else's existing youtube sync session, visit `localhost:80
 
 All youtube-together session urls can easily be embedded in an iframe to easily allow users to watch youtube videos together on your platform.
 
-### Contributing
+## Contributing
 
-#### Submitting Issues
+### Submitting Issues
 
 If you notice any bugs, create a GitHub issue with the title being a very short summary of the problem, e.g. `Sync not working on start`, and the description being the _exact_ steps to reproduce the issue. If we do not have the _exact_ steps, we can't figure out what's wrong and can't fix it.
 
 If you notice any room for improvement, create a GitHub issue with the title being a very short summary of the improvement, e.g. `Improve session scalability`, and the description being the improvement you would like to see made. Feel free to add hints on the approach you would take.
 
-#### Addressing Issues
+### Addressing Issues
 
 Thank you for deciding to contribute! Pick a GitHub issue that you would like to address (or add your own), and then assign yourself to that issue. Then, fork the repo and add any changes you would like to make to that fork. Currently, we don't have tests in place so please be sure to test various scenarios locally before deciding your changes are ready to submit. When you would like to submit your changes for review, create a pull request, list the specific changes that you made, and I will review/test it myself as soon as possible.
 
@@ -71,7 +91,7 @@ Please contribute! This project needs scalability and sync improvements to allow
 
 If you have any questions at all, please feel free to contact me on [linkedin](https://www.linkedin.com/in/aspyn-palatnick-577270131/) and I'll get back to you as soon as possible.
 
-### Contributors
+## Contributors
 
 [@filahf](https://github.com/filahf) [@stuckinaboot](https://github.com/stuckinaboot)
 
