@@ -10,8 +10,8 @@ dotenv.config({ path: "./config/config.env" });
  * Start the youtube together server.
  * If httpsConfig has key and cert defined, attempt to
  * start server using https
- * @port port to run server on
  * @param {{keyFilePath: string, certFilePath: string, caFilePath}} httpsConfig
+ * @param port port number to run server on
  */
 module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
   //Body parser
