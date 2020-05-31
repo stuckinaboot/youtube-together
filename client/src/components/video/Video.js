@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
 
 var player;
@@ -9,6 +9,7 @@ const Video = (props) => {
     shouldPause: false,
     timestamp: 0,
   });
+  const bufferStartTimeRef = useRef(0);
 
   const loadVideo = () => {
     player = new window.YT.Player("player", {
@@ -69,8 +70,11 @@ const Video = (props) => {
       data.action === "currenttime" &&
       (videoStatus === 2 || videoStatus === -1)
     ) {
+      const updatedCurrentTime =
+        data.currentTime + (Date.now() - data.timestamp) / 1000;
+      // TODO buffer?
       playVideo();
-      seekTo(data.currentTime);
+      seekTo(updatedCurrentTime, true);
     } else if (data.action === "pause" && videoStatus !== 2) pauseVideo();
   };
 
@@ -101,27 +105,54 @@ const Video = (props) => {
 
   const playVideo = () => player.playVideo();
   const syncPause = () => {
+    let currTime = player.getCurrentTime();
+    if (bufferStartTimeRef.current > 0) {
+      const timeDiff = (Date.now() - bufferStartTimeRef.current) / 1000;
+      bufferStartTimeRef.current = 0;
+      if (timeDiff > 0.1) {
+        currTime += timeDiff;
+        seekTo(currTime, true);
+      }
+    }
+    console.log("upload pause");
     props.socket.send(
       JSON.stringify({
         event: "sync",
         action: "pause",
-        currentTime: player.getCurrentTime(),
+        currentTime: currTime,
         timestamp: Date.now(),
       })
     );
   };
-  const currentStatus = () =>
-    JSON.stringify({
+  const currentStatus = () => {
+    let currTime = player.getCurrentTime();
+    if (bufferStartTimeRef.current > 0) {
+      const timeDiff = (Date.now() - bufferStartTimeRef.current) / 1000;
+      console.log("diff is", timeDiff);
+      if (timeDiff > 0.1) {
+        currTime += timeDiff;
+        seekTo(currTime, true);
+      }
+      bufferStartTimeRef.current = 0;
+    }
+    console.log("upload sync");
+    return JSON.stringify({
       event: "sync",
       action: "currenttime",
       videoID: videoID,
-      currentTime: player.getCurrentTime(),
+      currentTime: currTime,
       timestamp: Date.now(),
     });
+  };
 
   const changeState = (triggered) => {
+    console.log("hit trig", triggered);
     if (triggered === 1) sync();
     else if (triggered === 2) syncPause();
+    else if (triggered === 3) {
+      console.log("BUFFER");
+      bufferStartTimeRef.current = Date.now();
+    }
   };
 
   return (
