@@ -74,7 +74,7 @@ const Video = (props) => {
       const updatedCurrentTime =
         data.currentTime + (Date.now() - data.timestamp) / 1000;
       updateTimeRef.current = data;
-      // TODO buffer?
+
       playVideo();
       seekTo(updatedCurrentTime, true);
     } else if (data.action === "pause" && videoStatus !== 2) pauseVideo();
@@ -110,21 +110,7 @@ const Video = (props) => {
   const syncPause = () => {
     let currTime = player.getCurrentTime();
     updateTimeRef.current = { timestamp: Date.now(), currentTime: currTime };
-    // if (updateTimeRef.current != null) {
-    //   const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
-    //   const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
 
-    //   console.log("diff is", timeDiff);
-    //   // if (timeDiff > 0.1) {
-    //   // currTime += timeDiff;
-    //   if (Math.abs(expectedCurrTime - currTime) > 0.1) {
-    //     currTime = updateTimeRef.current.currentTime + timeDiff;
-    //     seekTo(currTime, true);
-    //   } else {
-    //     console.log("should SETTING NULL");
-    //     // updateTimeRef.current = null;
-    //   }
-    // }
     console.log("upload pause");
     props.socket.send(
       JSON.stringify({
@@ -143,14 +129,12 @@ const Video = (props) => {
       const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
 
       console.log("diff is", timeDiff);
-      // if (timeDiff > 0.1) {
-      // currTime += timeDiff;
+
       if (Math.abs(expectedCurrTime - currTime) > 0.1) {
         currTime = updateTimeRef.current.currentTime + timeDiff;
         seekTo(currTime, true);
       } else {
         console.log("shouldplay SETTING NULL");
-        // updateTimeRef.current = null;
       }
     }
     console.log("upload sync");
@@ -167,9 +151,6 @@ const Video = (props) => {
     console.log("hit trig", triggered);
     if (triggered === 1) sync();
     else if (triggered === 2) syncPause();
-    // else if (triggered === 3) {
-    //   console.log("BUFFER");
-    // }
   };
 
   return (
