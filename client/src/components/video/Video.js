@@ -64,21 +64,23 @@ const Video = (props) => {
   });
 
   const updateVideo = (data) => {
+    if (player == null || player.getPlayerState == null) {
+      // the above should not be null by this point but if it is return
+      // as the code will crash below
+      return;
+    }
     let videoStatus = player.getPlayerState();
 
     if (
       data.action === "currenttime" &&
       (videoStatus === 2 || videoStatus === -1)
     ) {
-      const updatedCurrentTime =
-        data.currentTime + (Date.now() - data.timestamp) / 1000;
       updateTimeRef.current = {
         currentTime: data.currentTime,
         timestamp: data.timestamp,
       };
 
       playVideo();
-      seekTo(updatedCurrentTime, true);
     } else if (data.action === "pause" && videoStatus !== 2) pauseVideo();
   };
 
@@ -117,7 +119,7 @@ const Video = (props) => {
   const syncPause = () => {
     const timestamp = Date.now();
     let currTime = player.getCurrentTime();
-    updateTimeRef.current = { timestamp: timestamp, currentTime: currTime };
+    updateTimeRef.current = null;
 
     props.socket.send(
       JSON.stringify({
