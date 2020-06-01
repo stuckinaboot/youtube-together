@@ -9,7 +9,6 @@ const Video = (props) => {
     shouldPause: false,
     timestamp: 0,
   });
-
   const updateTimeRef = useRef();
 
   const loadVideo = () => {
@@ -73,7 +72,10 @@ const Video = (props) => {
     ) {
       const updatedCurrentTime =
         data.currentTime + (Date.now() - data.timestamp) / 1000;
-      updateTimeRef.current = data;
+      updateTimeRef.current = {
+        currentTime: data.currentTime,
+        timestamp: data.timestamp,
+      };
 
       playVideo();
       seekTo(updatedCurrentTime, true);
@@ -96,7 +98,10 @@ const Video = (props) => {
 
     // Update time ref so that on play video state change
     // seekTo will get triggered
-    updateTimeRef.current = initialVideoState;
+    updateTimeRef.current = {
+      timestamp: initialVideoState.timestamp,
+      currentTime: initialVideoState.currentTime,
+    };
     event.target.playVideo();
     if (initialVideoState.shouldPause) {
       event.target.pauseVideo();
