@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
 
 var player;
@@ -9,6 +9,7 @@ const Video = (props) => {
     shouldPause: false,
     timestamp: 0,
   });
+  const updateTimeRef = useRef();
 
   const loadVideo = () => {
     player = new window.YT.Player("player", {
@@ -63,32 +64,47 @@ const Video = (props) => {
   });
 
   const updateVideo = (data) => {
+    if (player == null || player.getPlayerState == null) {
+      // the above should not be null by this point but if it is return
+      // as the code will crash below
+      return;
+    }
     let videoStatus = player.getPlayerState();
 
     if (
       data.action === "currenttime" &&
       (videoStatus === 2 || videoStatus === -1)
     ) {
+      updateTimeRef.current = {
+        currentTime: data.currentTime,
+        timestamp: data.timestamp,
+      };
+
       playVideo();
-      seekTo(data.currentTime);
     } else if (data.action === "pause" && videoStatus !== 2) pauseVideo();
   };
 
   const onPlayerReady = (event) => {
-    event.target.playVideo();
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
+      event.target.playVideo();
+      updateTimeRef.current = {
+        timestamp: Date.now(),
+        currentTime:
+          event.target.getCurrentTime != null
+            ? event.target.getCurrentTime()
+            : 0,
+      };
       return;
     }
 
-    // The time we want to be at is the time in video
-    // when currentTime occurred plus the duration after currentTime,
-    // in seconds
-    const updatedCurrentTime =
-      initialVideoState.currentTime +
-      (Date.now() - initialVideoState.timestamp) / 1000;
-
-    event.target.seekTo(updatedCurrentTime, true);
+    // Update time ref so that on play video state change
+    // seekTo will get triggered
+    updateTimeRef.current = {
+      timestamp: initialVideoState.timestamp,
+      currentTime: initialVideoState.currentTime,
+    };
+    event.target.playVideo();
     if (initialVideoState.shouldPause) {
       event.target.pauseVideo();
     }
@@ -101,23 +117,40 @@ const Video = (props) => {
 
   const playVideo = () => player.playVideo();
   const syncPause = () => {
+    const timestamp = Date.now();
+    let currTime = player.getCurrentTime();
+    updateTimeRef.current = null;
+
     props.socket.send(
       JSON.stringify({
         event: "sync",
         action: "pause",
-        currentTime: player.getCurrentTime(),
-        timestamp: Date.now(),
+        currentTime: currTime,
+        timestamp: timestamp,
       })
     );
   };
-  const currentStatus = () =>
-    JSON.stringify({
+
+  const currentStatus = () => {
+    let currTime = player.getCurrentTime();
+    if (updateTimeRef.current != null) {
+      const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
+      const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
+
+      if (Math.abs(expectedCurrTime - currTime) > 0.1) {
+        currTime = updateTimeRef.current.currentTime + timeDiff;
+        seekTo(currTime, true);
+      }
+    }
+
+    return JSON.stringify({
       event: "sync",
       action: "currenttime",
       videoID: videoID,
-      currentTime: player.getCurrentTime(),
+      currentTime: currTime,
       timestamp: Date.now(),
     });
+  };
 
   const changeState = (triggered) => {
     if (triggered === 1) sync();
