@@ -15,10 +15,13 @@ const Video = (props) => {
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
-        // Mute the user because if the user is unmuted,
-        // we can't autoplay the video for that user
+        // Mute non-leader users on the assumption that the leader
+        // will be play able to autoplay + have sound (and if not it
+        // should still be ok as sync will still work after leader starts
+        // playing)
+        // https://stackoverflow.com/questions/50495493/youtube-iframe-api-doesnt-autoplay
         // https://stackoverflow.com/questions/40685142/youtube-autoplay-not-working
-        mute: 1,
+        mute: props.leader ? 0 : 1,
       },
       events: {
         onReady: onPlayerReady,
