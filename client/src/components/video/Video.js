@@ -81,21 +81,23 @@ const Video = (props) => {
   };
 
   const onPlayerReady = (event) => {
-    event.target.playVideo();
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
+      event.target.playVideo();
+      updateTimeRef.current = {
+        timestamp: Date.now(),
+        currentTime:
+          event.target.getCurrentTime != null
+            ? event.target.getCurrentTime()
+            : 0,
+      };
       return;
     }
 
-    // The time we want to be at is the time in video
-    // when currentTime occurred plus the duration after currentTime,
-    // in seconds
-    const updatedCurrentTime =
-      initialVideoState.currentTime +
-      (Date.now() - initialVideoState.timestamp) / 1000;
+    // Update time ref so that on play video state change
+    // seekTo will get triggered
     updateTimeRef.current = initialVideoState;
-
-    event.target.seekTo(updatedCurrentTime, true);
+    event.target.playVideo();
     if (initialVideoState.shouldPause) {
       event.target.pauseVideo();
     }
@@ -108,16 +110,16 @@ const Video = (props) => {
 
   const playVideo = () => player.playVideo();
   const syncPause = () => {
+    const timestamp = Date.now();
     let currTime = player.getCurrentTime();
-    updateTimeRef.current = { timestamp: Date.now(), currentTime: currTime };
+    updateTimeRef.current = { timestamp: timestamp, currentTime: currTime };
 
-    console.log("upload pause");
     props.socket.send(
       JSON.stringify({
         event: "sync",
         action: "pause",
         currentTime: currTime,
-        timestamp: Date.now(),
+        timestamp: timestamp,
       })
     );
   };
@@ -128,16 +130,12 @@ const Video = (props) => {
       const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
       const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
 
-      console.log("diff is", timeDiff);
-
       if (Math.abs(expectedCurrTime - currTime) > 0.1) {
         currTime = updateTimeRef.current.currentTime + timeDiff;
         seekTo(currTime, true);
-      } else {
-        console.log("shouldplay SETTING NULL");
       }
     }
-    console.log("upload sync");
+
     return JSON.stringify({
       event: "sync",
       action: "currenttime",
@@ -148,7 +146,6 @@ const Video = (props) => {
   };
 
   const changeState = (triggered) => {
-    console.log("hit trig", triggered);
     if (triggered === 1) sync();
     else if (triggered === 2) syncPause();
   };
