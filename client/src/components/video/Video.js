@@ -9,7 +9,7 @@ const Video = (props) => {
     shouldPause: false,
     timestamp: 0,
   });
-  const bufferStartTimeRef = useRef(0);
+
   const updateTimeRef = useRef();
 
   const loadVideo = () => {
@@ -108,32 +108,23 @@ const Video = (props) => {
 
   const playVideo = () => player.playVideo();
   const syncPause = () => {
-    // let currTime = player.getCurrentTime();
-    // if (bufferStartTimeRef.current > 0) {
-    //   const timeDiff = (Date.now() - bufferStartTimeRef.current) / 1000;
-    //   bufferStartTimeRef.current = 0;
-    //   if (timeDiff > 0.1) {
-    //     currTime += timeDiff;
+    let currTime = player.getCurrentTime();
+    updateTimeRef.current = { timestamp: Date.now(), currentTime: currTime };
+    // if (updateTimeRef.current != null) {
+    //   const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
+    //   const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
+
+    //   console.log("diff is", timeDiff);
+    //   // if (timeDiff > 0.1) {
+    //   // currTime += timeDiff;
+    //   if (Math.abs(expectedCurrTime - currTime) > 0.1) {
+    //     currTime = updateTimeRef.current.currentTime + timeDiff;
     //     seekTo(currTime, true);
+    //   } else {
+    //     console.log("should SETTING NULL");
+    //     // updateTimeRef.current = null;
     //   }
     // }
-    let currTime = player.getCurrentTime();
-    if (bufferStartTimeRef.current > 0 && updateTimeRef.current != null) {
-      const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
-      const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
-      // const timeDiff = (Date.now() - bufferStartTimeRef.current) / 1000;
-      console.log("diff is", timeDiff);
-      // if (timeDiff > 0.1) {
-      // currTime += timeDiff;
-      if (Math.abs(expectedCurrTime - currTime) > 0.1) {
-        currTime = updateTimeRef.current.currentTime + timeDiff;
-        seekTo(currTime, true);
-      } else {
-        console.log("should SETTING NULL");
-        // updateTimeRef.current = null;
-      }
-      bufferStartTimeRef.current = 0;
-    }
     console.log("upload pause");
     props.socket.send(
       JSON.stringify({
@@ -147,10 +138,10 @@ const Video = (props) => {
 
   const currentStatus = () => {
     let currTime = player.getCurrentTime();
-    if (bufferStartTimeRef.current > 0 && updateTimeRef.current != null) {
+    if (updateTimeRef.current != null) {
       const timeDiff = (Date.now() - updateTimeRef.current.timestamp) / 1000;
       const expectedCurrTime = updateTimeRef.current.currentTime + timeDiff;
-      // const timeDiff = (Date.now() - bufferStartTimeRef.current) / 1000;
+
       console.log("diff is", timeDiff);
       // if (timeDiff > 0.1) {
       // currTime += timeDiff;
@@ -161,7 +152,6 @@ const Video = (props) => {
         console.log("shouldplay SETTING NULL");
         // updateTimeRef.current = null;
       }
-      bufferStartTimeRef.current = 0;
     }
     console.log("upload sync");
     return JSON.stringify({
@@ -177,10 +167,9 @@ const Video = (props) => {
     console.log("hit trig", triggered);
     if (triggered === 1) sync();
     else if (triggered === 2) syncPause();
-    else if (triggered === 3) {
-      console.log("BUFFER");
-      bufferStartTimeRef.current = Date.now();
-    }
+    // else if (triggered === 3) {
+    //   console.log("BUFFER");
+    // }
   };
 
   return (
