@@ -11,9 +11,16 @@ const Video = (props) => {
     timestamp: 0,
   });
   const updateTimeRef = useRef();
-  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  // Show modal only if not leader
+  const [modalIsOpen, setIsOpen] = React.useState(!props.leader);
 
   const loadVideo = () => {
+    console.log("LOADING THIS VIDEO", player);
+    if (player != null) {
+      // Ensure we only load player once
+      return;
+    }
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
@@ -38,11 +45,9 @@ const Video = (props) => {
 
   useEffect(() => {
     props.socket.addEventListener("message", (event) => {
-      console.log("LOADING");
       let data = JSON.parse(event.data);
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
-        console.log("HIT ME", data);
         join(data);
 
         // On join, ensure that we go to the correct time
@@ -69,9 +74,12 @@ const Video = (props) => {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       } else loadVideo();
     }
-  }, []);
+  });
 
   const updateVideo = (data) => {
+    if (modalIsOpen) {
+      setIsOpen(false);
+    }
     if (player == null || player.getPlayerState == null) {
       // the above should not be null by this point but if it is return
       // as the code will crash below
@@ -94,17 +102,9 @@ const Video = (props) => {
 
   const onPlayerReady = (event) => {
     if (initialVideoState.timestamp === 0) {
-      setIsOpen(false);
       // Implies we are first user to join
       event.target.playVideo();
       event.target.pauseVideo();
-      updateTimeRef.current = {
-        timestamp: Date.now(),
-        currentTime:
-          event.target.getCurrentTime != null
-            ? event.target.getCurrentTime()
-            : 0,
-      };
       return;
     }
 
