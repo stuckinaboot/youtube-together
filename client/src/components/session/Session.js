@@ -12,7 +12,8 @@ const Session = (props) => {
   const socket = new WebSocket(url);
   let sessID = props.sessionID;
 
-  let { sessionID } = useParams();
+  let { sessionID, leaderName } = useParams();
+
   if (!sessID) {
     sessID = sessionID;
   }
@@ -36,6 +37,7 @@ const Session = (props) => {
     <Video
       videoID={props.videoID}
       leader={props.leader}
+      leaderName={leaderName || "leader"}
       sessionID={sessID}
       socket={socket}
     />

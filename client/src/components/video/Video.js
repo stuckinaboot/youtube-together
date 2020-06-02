@@ -16,7 +16,6 @@ const Video = (props) => {
   const [modalIsOpen, setIsOpen] = React.useState(!props.leader);
 
   const loadVideo = () => {
-    console.log("LOADING THIS VIDEO", player);
     if (player != null) {
       // Ensure we only load player once
       return;
@@ -187,7 +186,7 @@ const Video = (props) => {
             }}
           >
             <h3 style={{ fontFamily: "Lato, sans-serif" }}>
-              Waiting for leader to start video
+              Waiting for {props.leaderName} to start video
             </h3>
           </div>
         </Modal>
