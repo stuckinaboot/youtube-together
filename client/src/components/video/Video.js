@@ -58,6 +58,9 @@ const Video = (props) => {
             shouldPause: data.latestEvent.action === "pause",
             timestamp: data.latestEvent.timestamp,
           });
+          if (modalIsOpen) {
+            setIsOpen(false);
+          }
         }
       }
     });
