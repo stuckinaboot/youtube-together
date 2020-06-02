@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
+import Modal from "react-modal";
 
 var player;
 const Video = (props) => {
@@ -10,6 +11,7 @@ const Video = (props) => {
     timestamp: 0,
   });
   const updateTimeRef = useRef();
+  const [modalIsOpen, setIsOpen] = React.useState(false);
 
   const loadVideo = () => {
     player = new window.YT.Player("player", {
@@ -36,9 +38,11 @@ const Video = (props) => {
 
   useEffect(() => {
     props.socket.addEventListener("message", (event) => {
+      console.log("LOADING");
       let data = JSON.parse(event.data);
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
+        console.log("HIT ME", data);
         join(data);
 
         // On join, ensure that we go to the correct time
@@ -53,6 +57,7 @@ const Video = (props) => {
         }
       }
     });
+
     if (videoID !== null) {
       if (!window.YT) {
         const tag = document.createElement("script");
@@ -64,7 +69,7 @@ const Video = (props) => {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       } else loadVideo();
     }
-  });
+  }, []);
 
   const updateVideo = (data) => {
     if (player == null || player.getPlayerState == null) {
@@ -89,8 +94,10 @@ const Video = (props) => {
 
   const onPlayerReady = (event) => {
     if (initialVideoState.timestamp === 0) {
+      setIsOpen(false);
       // Implies we are first user to join
       event.target.playVideo();
+      event.target.pauseVideo();
       updateTimeRef.current = {
         timestamp: Date.now(),
         currentTime:
@@ -162,9 +169,29 @@ const Video = (props) => {
 
   return (
     <div className="video">
-      <div id="player">
-        <h3>Loading...</h3>
-      </div>
+      <>
+        <div id="player">
+          <h3>Loading...</h3>
+        </div>
+        <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "auto",
+              marginBottom: "auto",
+              height: "100%",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h3 style={{ fontFamily: "Lato, sans-serif" }}>
+              Waiting for leader to start video
+            </h3>
+          </div>
+        </Modal>
+      </>
     </div>
   );
 };
