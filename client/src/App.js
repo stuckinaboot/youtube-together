@@ -27,7 +27,7 @@ function App() {
               render={() => <CreateSession session={createSession} />}
             />
             <Route
-              path="/watch/:sessionID"
+              path="/watch/:sessionID/:leaderName?"
               render={() => (
                 <Session
                   leader={leader}

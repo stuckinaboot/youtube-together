@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
+import Modal from "react-modal";
 
 var player;
 const Video = (props) => {
@@ -11,7 +12,14 @@ const Video = (props) => {
   });
   const updateTimeRef = useRef();
 
+  // Show modal only if not leader
+  const [modalIsOpen, setIsOpen] = React.useState(!props.leader);
+
   const loadVideo = () => {
+    if (player != null) {
+      // Ensure we only load player once
+      return;
+    }
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
@@ -50,9 +58,13 @@ const Video = (props) => {
             shouldPause: data.latestEvent.action === "pause",
             timestamp: data.latestEvent.timestamp,
           });
+          if (modalIsOpen) {
+            setIsOpen(false);
+          }
         }
       }
     });
+
     if (videoID !== null) {
       if (!window.YT) {
         const tag = document.createElement("script");
@@ -67,6 +79,9 @@ const Video = (props) => {
   });
 
   const updateVideo = (data) => {
+    if (modalIsOpen) {
+      setIsOpen(false);
+    }
     if (player == null || player.getPlayerState == null) {
       // the above should not be null by this point but if it is return
       // as the code will crash below
@@ -91,13 +106,7 @@ const Video = (props) => {
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
       event.target.playVideo();
-      updateTimeRef.current = {
-        timestamp: Date.now(),
-        currentTime:
-          event.target.getCurrentTime != null
-            ? event.target.getCurrentTime()
-            : 0,
-      };
+      event.target.pauseVideo();
       return;
     }
 
@@ -162,9 +171,29 @@ const Video = (props) => {
 
   return (
     <div className="video">
-      <div id="player">
-        <h3>Loading...</h3>
-      </div>
+      <>
+        <div id="player">
+          <h3>Loading...</h3>
+        </div>
+        <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "auto",
+              marginBottom: "auto",
+              height: "100%",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h3 style={{ fontFamily: "Lato, sans-serif" }}>
+              Waiting for {props.leaderName} to start video
+            </h3>
+          </div>
+        </Modal>
+      </>
     </div>
   );
 };

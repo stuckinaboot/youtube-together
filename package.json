@@ -1,6 +1,6 @@
 {
   "name": "youtube-together",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Embed youtube-together sessions in any iframe to allow watching youtube videos together with friends located anywhere",
   "main": "server/server.js",
   "scripts": {
@@ -43,6 +43,7 @@
     "node-sass": "^4.14.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-modal": "^3.11.2",
     "react-responsive": "^8.0.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
