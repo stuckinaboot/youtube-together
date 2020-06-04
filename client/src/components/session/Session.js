@@ -22,15 +22,12 @@ const Session = (props) => {
 
   useEffect(() => {
     socket.on("connect", () =>
-      socket.emit(
-        "message",
-        JSON.stringify({
-          event: "session",
-          action: props.action,
-          sessionID: sessID,
-          videoID: props.videoID,
-        })
-      )
+      socket.emit("message", {
+        event: "session",
+        action: props.action,
+        sessionID: sessID,
+        videoID: props.videoID,
+      })
     );
   });
   if (sessionID === "leader" && !props.leader) {

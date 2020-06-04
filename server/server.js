@@ -54,14 +54,14 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
 
   io.on("connection", (ws) => {
     ws.on("message", (message) => {
-      console.log(JSON.parse(message));
-      handleMessage(JSON.parse(message), ws);
+      console.log(message);
+      handleMessage(message, ws);
     });
   });
 
   const brodcastMessage = (data, users, ws) => {
     users.forEach((user) => {
-      if (user.ws != ws) user.ws.emit("message", JSON.stringify(data));
+      if (user.ws != ws) user.ws.emit("message", data);
     });
   };
 
@@ -120,15 +120,12 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
     if (session) {
       session.users.push({ ws: ws });
       var totalusers = session.users.length;
-      ws.emit(
-        "message",
-        JSON.stringify({
-          event: "join",
-          videoID: session.videoID,
-          users: totalusers,
-          latestEvent: session.latestEvent,
-        })
-      );
+      ws.emit("message", {
+        event: "join",
+        videoID: session.videoID,
+        users: totalusers,
+        latestEvent: session.latestEvent,
+      });
       brodcastMessage(
         {
           event: "users",
