@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
 import Modal from "react-modal";
+import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
 var player;
 const Video = (props) => {
@@ -215,11 +218,16 @@ const Video = (props) => {
       </div>
       <div style={{ width: "100%", textAlign: "center" }}>
         <br />
-        <Button variant="outlined" onClick={toggleIsSpeaker}>
-          {isSpeakerState
-            ? "Playing out of your speakers"
-            : "Can't hear audio? Press to play out of your speakers"}
-        </Button>
+        <Box display="flex" alignItems="center" justifyContent="center">
+          <Button variant="outlined" onClick={toggleIsSpeaker}>
+            {isSpeakerState
+              ? "Playing out of your speakers"
+              : "Can't hear audio? Press to play out of your speakers"}
+          </Button>
+          <Tooltip title="Audio sync only works when you have sound playing from one person's laptop speaker. Pass the speaker around as your friends join and leave">
+            <HelpOutlineIcon />
+          </Tooltip>
+        </Box>
       </div>
     </>
   );
