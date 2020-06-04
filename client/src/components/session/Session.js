@@ -7,9 +7,7 @@ import socketIOClient from "socket.io-client";
 const Session = (props) => {
   const history = useHistory();
 
-  const url = `${window.location.protocol}//${
-    window.location.hostname
-  }:${8000}/`;
+  const url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
   const socket = socketIOClient(url);
   console.log("hit this shit", socket, url);
   let sessID = props.sessionID;
