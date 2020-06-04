@@ -224,7 +224,7 @@ const Video = (props) => {
               ? "Playing out of your speakers"
               : "Can't hear audio? Press to play out of your speakers"}
           </Button>
-          <Tooltip title="Audio sync only works when you have sound playing from at least one person's laptop speaker. Pass the speaker around as your friends join and leave">
+          <Tooltip title="Audio sync only works when you have sound playing from one person's laptop speaker. Pass the speaker around as your friends join and leave">
             <HelpOutlineIcon />
           </Tooltip>
         </Box>
