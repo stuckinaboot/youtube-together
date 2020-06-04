@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
 import Modal from "react-modal";
-import Button from "@material/react-button";
-import "@material/react-button/dist/button.css";
+import Button from "@material-ui/core/Button";
 
 var player;
 const Video = (props) => {
@@ -222,8 +221,9 @@ const Video = (props) => {
         </>
       </div>
       <div style={{ width: "100%", textAlign: "center" }}>
+        <br />
         <Button
-          outlined
+          variant="outlined"
           style={{
             borderColor: "#3f51b5",
             color: "#3f51b5",
