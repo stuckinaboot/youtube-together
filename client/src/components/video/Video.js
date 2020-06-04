@@ -55,7 +55,6 @@ const Video = (props) => {
       }
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
-        console.log("HIT ME", data);
         join(data);
 
         // On join, ensure that we go to the correct time
@@ -180,7 +179,6 @@ const Video = (props) => {
   };
 
   function toggleIsSpeaker() {
-    console.log("speaker val", isSpeakerState);
     if (!isSpeakerState) {
       setIsSpeakerState(true);
       player.unMute();
@@ -196,40 +194,31 @@ const Video = (props) => {
   return (
     <>
       <div className="video">
-        <>
-          <div id="player">
-            <h3>Loading...</h3>
+        <div id="player">
+          <h3>Loading...</h3>
+        </div>
+        <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "auto",
+              marginBottom: "auto",
+              height: "100%",
+              overflow: "hidden",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h3 style={{ fontFamily: "Lato, sans-serif" }}>
+              Waiting for {props.leaderName} to start video
+            </h3>
           </div>
-          <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
-            <div
-              style={{
-                textAlign: "center",
-                marginTop: "auto",
-                marginBottom: "auto",
-                height: "100%",
-                overflow: "hidden",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <h3 style={{ fontFamily: "Lato, sans-serif" }}>
-                Waiting for {props.leaderName} to start video
-              </h3>
-            </div>
-          </Modal>
-        </>
+        </Modal>
       </div>
       <div style={{ width: "100%", textAlign: "center" }}>
         <br />
-        <Button
-          variant="outlined"
-          style={{
-            borderColor: "#3f51b5",
-            color: "#3f51b5",
-          }}
-          onClick={toggleIsSpeaker}
-        >
+        <Button variant="outlined" onClick={toggleIsSpeaker}>
           {isSpeakerState
             ? "Playing out of your speakers"
             : "Can't hear audio? Press to play out of your speakers"}
