@@ -56,6 +56,7 @@ const Video = (props) => {
       }
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
+        console.log("HIT ME", data);
         join(data);
 
         // On join, ensure that we go to the correct time
@@ -220,15 +221,20 @@ const Video = (props) => {
           </Modal>
         </>
       </div>
-      <Button
-        outlined
-        style={{ borderColor: "#3f51b5", color: "#3f51b5" }}
-        onClick={toggleIsSpeaker}
-      >
-        {isSpeakerState
-          ? "Playing out of your speakers"
-          : "Can't hear audio? Press to play out of your speakers"}
-      </Button>
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <Button
+          outlined
+          style={{
+            borderColor: "#3f51b5",
+            color: "#3f51b5",
+          }}
+          onClick={toggleIsSpeaker}
+        >
+          {isSpeakerState
+            ? "Playing out of your speakers"
+            : "Can't hear audio? Press to play out of your speakers"}
+        </Button>
+      </div>
     </>
   );
 };
