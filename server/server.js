@@ -69,6 +69,7 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
     let event = data.event;
     if (event === "session") handleSessionEvent(data, ws);
     else if (event === "sync") handleSyncEvent(data, ws);
+    else if (event === "speaker") handleSpeakerEvent(data, ws);
   };
 
   const sessionById = (id) => {
@@ -94,6 +95,20 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
             timestamp: data.timestamp,
             currentTime: data.currentTime,
           };
+        }
+      });
+    });
+  };
+
+  const handleSpeakerEvent = (data, ws) => {
+    sessions.forEach((session) => {
+      session.users.forEach((user) => {
+        // TODO this whole double loop is inefficient
+        // and is same as sync event loop (but does
+        // not update latestEvent, which is CORRECT as
+        // we do not care about recording the speaker event)
+        if (user.ws == ws) {
+          brodcastMessage(data, session.users, ws);
         }
       });
     });

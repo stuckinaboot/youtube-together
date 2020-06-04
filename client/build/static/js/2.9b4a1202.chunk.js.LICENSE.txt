@@ -22,6 +22,14 @@ object-assign
  * http://api.jqueryui.com/category/ui-core/
  */
 
+/**
+ * A better abstraction over CSS.
+ *
+ * @copyright Oleg Isonen (Slobodskoi) / Isonen 2014-present
+ * @website https://github.com/cssinjs/jss
+ * @license MIT
+ */
+
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
