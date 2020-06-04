@@ -47,8 +47,8 @@ const Video = (props) => {
   };
 
   useEffect(() => {
-    props.socket.addEventListener("message", (event) => {
-      let data = JSON.parse(event.data);
+    props.socket.on("message", (event) => {
+      let data = event;
       if (data.event === "speaker") {
         setIsSpeakerState(false);
         player.mute();
@@ -59,7 +59,6 @@ const Video = (props) => {
 
         // On join, ensure that we go to the correct time
         // in the video
-        // TODO this logic may be wrong
         if (data.latestEvent != null) {
           setInitialVideoState({
             currentTime: data.latestEvent.currentTime,
@@ -134,7 +133,7 @@ const Video = (props) => {
   };
 
   const onStateChange = (event) => changeState(event.data);
-  const sync = () => props.socket.send(currentStatus());
+  const sync = () => props.socket.emit("message", currentStatus());
   const seekTo = (second) => player.seekTo(second, true);
   const pauseVideo = () => player.pauseVideo();
 
@@ -144,14 +143,12 @@ const Video = (props) => {
     let currTime = player.getCurrentTime();
     updateTimeRef.current = null;
 
-    props.socket.send(
-      JSON.stringify({
-        event: "sync",
-        action: "pause",
-        currentTime: currTime,
-        timestamp: timestamp,
-      })
-    );
+    props.socket.emit("message", {
+      event: "sync",
+      action: "pause",
+      currentTime: currTime,
+      timestamp: timestamp,
+    });
   };
 
   const currentStatus = () => {
@@ -166,13 +163,13 @@ const Video = (props) => {
       }
     }
 
-    return JSON.stringify({
+    return {
       event: "sync",
       action: "currenttime",
       videoID: videoID,
       currentTime: currTime,
       timestamp: Date.now(),
-    });
+    };
   };
 
   const changeState = (triggered) => {
@@ -184,12 +181,10 @@ const Video = (props) => {
     if (!isSpeakerState) {
       setIsSpeakerState(true);
       player.unMute();
-      props.socket.send(
-        JSON.stringify({
-          event: "speaker",
-          action: "update",
-        })
-      );
+      props.socket.emit("message", {
+        event: "speaker",
+        action: "update",
+      });
     }
   }
 

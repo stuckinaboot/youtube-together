@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const fs = require("fs");
 const app = express();
+const socketio = require("socket.io");
 dotenv.config({ path: "./config/config.env" });
 
 /**
@@ -40,8 +41,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
         })
       : // Use http
         require("http").createServer();
-  const WebSocket = require("ws").Server;
-  const wss = new WebSocket({ server: server });
 
   app.get("/*", (_, res) => res.sendFile(INDEX_HTML_PATH));
   server.on("request", app);
@@ -49,19 +48,20 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
   const serverListener = server.listen(PORT, () => {
     console.log(`Listening on ${PORT}!`);
   });
+  const io = socketio(serverListener);
 
   let sessions = [];
 
-  wss.on("connection", (ws) => {
+  io.on("connection", (ws) => {
     ws.on("message", (message) => {
-      console.log(JSON.parse(message));
-      handleMessage(JSON.parse(message), ws);
+      console.log(message);
+      handleMessage(message, ws);
     });
   });
 
   const brodcastMessage = (data, users, ws) => {
     users.forEach((user) => {
-      if (user.ws != ws) user.ws.send(JSON.stringify(data));
+      if (user.ws != ws) user.ws.emit("message", data);
     });
   };
 
@@ -120,14 +120,12 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
     if (session) {
       session.users.push({ ws: ws });
       var totalusers = session.users.length;
-      ws.send(
-        JSON.stringify({
-          event: "join",
-          videoID: session.videoID,
-          users: totalusers,
-          latestEvent: session.latestEvent,
-        })
-      );
+      ws.emit("message", {
+        event: "join",
+        videoID: session.videoID,
+        users: totalusers,
+        latestEvent: session.latestEvent,
+      });
       brodcastMessage(
         {
           event: "users",
