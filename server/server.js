@@ -67,7 +67,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
 
   const handleMessage = (data, ws) => {
     let event = data.event;
-
     if (event === "session") handleSessionEvent(data, ws);
     else if (event === "sync") handleSyncEvent(data, ws);
     else if (event === "speaker") handleSpeakerEvent(data, ws);
