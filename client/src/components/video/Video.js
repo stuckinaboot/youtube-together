@@ -59,7 +59,6 @@ const Video = (props) => {
 
         // On join, ensure that we go to the correct time
         // in the video
-        // TODO this logic may be wrong
         if (data.latestEvent != null) {
           setInitialVideoState({
             currentTime: data.latestEvent.currentTime,
