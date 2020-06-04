@@ -22,6 +22,15 @@ object-assign
  * http://api.jqueryui.com/category/ui-core/
  */
 
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
+/*! https://mths.be/utf8js v2.1.2 by @mathias */
+
 /**
  * A better abstraction over CSS.
  *
