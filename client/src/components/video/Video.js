@@ -6,7 +6,6 @@ import "@material/react-button/dist/button.css";
 
 var player;
 const Video = (props) => {
-  const [isSpeaker, setIsSpeaker] = useState(props.leader);
   const [videoID, setVideoID] = useState(props.videoID);
   const [initialVideoState, setInitialVideoState] = useState({
     currentTime: 0,
@@ -14,6 +13,8 @@ const Video = (props) => {
     timestamp: 0,
   });
   const updateTimeRef = useRef();
+
+  const [isSpeakerState, setIsSpeakerState] = useState(props.leader);
 
   // Show modal only if not leader
   const [modalIsOpen, setIsOpen] = React.useState(!props.leader);
@@ -23,7 +24,7 @@ const Video = (props) => {
       // Ensure we only load player once
       return;
     }
-    console.log("isleader", props.leader);
+
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
@@ -47,20 +48,12 @@ const Video = (props) => {
   };
 
   useEffect(() => {
-    if (player == null) {
-      return;
-    }
-    if (isSpeaker) {
-      player.unMute();
-    } else {
-      player.mute();
-    }
-  }, [isSpeaker]);
-
-  useEffect(() => {
     props.socket.addEventListener("message", (event) => {
       let data = JSON.parse(event.data);
-      if (data.event === "speaker") setIsSpeaker(false);
+      if (data.event === "speaker") {
+        setIsSpeakerState(false);
+        player.mute();
+      }
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
         join(data);
@@ -119,10 +112,11 @@ const Video = (props) => {
   };
 
   const onPlayerReady = (event) => {
+    isSpeakerState ? player.unMute() : player.mute();
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
-      event.target.playVideo();
-      event.target.pauseVideo();
+      player.playVideo();
+      player.pauseVideo();
       return;
     }
 
@@ -132,9 +126,9 @@ const Video = (props) => {
       timestamp: initialVideoState.timestamp,
       currentTime: initialVideoState.currentTime,
     };
-    event.target.playVideo();
+    player.playVideo();
     if (initialVideoState.shouldPause) {
-      event.target.pauseVideo();
+      player.pauseVideo();
     }
   };
 
@@ -186,8 +180,10 @@ const Video = (props) => {
   };
 
   function toggleIsSpeaker() {
-    if (!isSpeaker) {
-      setIsSpeaker(!isSpeaker);
+    console.log("speaker val", isSpeakerState);
+    if (!isSpeakerState) {
+      setIsSpeakerState(true);
+      player.unMute();
       props.socket.send(
         JSON.stringify({
           event: "speaker",
@@ -229,7 +225,7 @@ const Video = (props) => {
         style={{ borderColor: "#3f51b5", color: "#3f51b5" }}
         onClick={toggleIsSpeaker}
       >
-        {isSpeaker
+        {isSpeakerState
           ? "Playing out of your speakers"
           : "Can't hear audio? Press to play out of your speakers"}
       </Button>
