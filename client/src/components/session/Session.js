@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Video from "../video/Video";
@@ -6,9 +6,9 @@ import Video from "../video/Video";
 const Session = (props) => {
   const history = useHistory();
   const isHttps = window.location.protocol.startsWith("https:");
-  const url = `${isHttps ? "wss" : "ws"}://${window.location.hostname}:${
-    window.location.port
-  }/`;
+  const url = `${isHttps ? "wss" : "ws"}://${
+    window.location.hostname
+  }:${8000}/`;
   const socket = new WebSocket(url);
   let sessID = props.sessionID;
 

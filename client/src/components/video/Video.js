@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./video.scss";
 import Modal from "react-modal";
+import Button from "@material/react-button";
+import "@material/react-button/dist/button.css";
 
 var player;
 const Video = (props) => {
+  const [isSpeaker, setIsSpeaker] = useState(props.leader);
   const [videoID, setVideoID] = useState(props.videoID);
   const [initialVideoState, setInitialVideoState] = useState({
     currentTime: 0,
@@ -20,6 +23,7 @@ const Video = (props) => {
       // Ensure we only load player once
       return;
     }
+    console.log("isleader", props.leader);
     player = new window.YT.Player("player", {
       videoId: videoID,
       playerVars: {
@@ -43,8 +47,20 @@ const Video = (props) => {
   };
 
   useEffect(() => {
+    if (player == null) {
+      return;
+    }
+    if (isSpeaker) {
+      player.unMute();
+    } else {
+      player.mute();
+    }
+  }, [isSpeaker]);
+
+  useEffect(() => {
     props.socket.addEventListener("message", (event) => {
       let data = JSON.parse(event.data);
+      if (data.event === "speaker") setIsSpeaker(false);
       if (data.event === "sync") updateVideo(data);
       if (data.event === "join") {
         join(data);
@@ -169,32 +185,55 @@ const Video = (props) => {
     else if (triggered === 2) syncPause();
   };
 
+  function toggleIsSpeaker() {
+    if (!isSpeaker) {
+      setIsSpeaker(!isSpeaker);
+      props.socket.send(
+        JSON.stringify({
+          event: "speaker",
+          action: "update",
+        })
+      );
+    }
+  }
+
   return (
-    <div className="video">
-      <>
-        <div id="player">
-          <h3>Loading...</h3>
-        </div>
-        <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: "auto",
-              marginBottom: "auto",
-              height: "100%",
-              overflow: "hidden",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <h3 style={{ fontFamily: "Lato, sans-serif" }}>
-              Waiting for {props.leaderName} to start video
-            </h3>
+    <>
+      <div className="video">
+        <>
+          <div id="player">
+            <h3>Loading...</h3>
           </div>
-        </Modal>
-      </>
-    </div>
+          <Modal isOpen={modalIsOpen} contentLabel="Example Modal">
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "auto",
+                marginBottom: "auto",
+                height: "100%",
+                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <h3 style={{ fontFamily: "Lato, sans-serif" }}>
+                Waiting for {props.leaderName} to start video
+              </h3>
+            </div>
+          </Modal>
+        </>
+      </div>
+      <Button
+        outlined
+        style={{ borderColor: "#3f51b5", color: "#3f51b5" }}
+        onClick={toggleIsSpeaker}
+      >
+        {isSpeaker
+          ? "Playing out of your speakers"
+          : "Can't hear audio? Press to play out of your speakers"}
+      </Button>
+    </>
   );
 };
 
