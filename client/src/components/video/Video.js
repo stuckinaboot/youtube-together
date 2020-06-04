@@ -111,6 +111,8 @@ const Video = (props) => {
   };
 
   const onPlayerReady = (event) => {
+    // Update player mute (for some reason setting mute in
+    // playerVars doesn't always work so we force it here)
     isSpeakerState ? player.unMute() : player.mute();
     if (initialVideoState.timestamp === 0) {
       // Implies we are first user to join
