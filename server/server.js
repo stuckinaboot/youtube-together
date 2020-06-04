@@ -42,9 +42,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
       : // Use http
         require("http").createServer();
 
-  // const WebSocket = require("ws").Server;
-  // const wss = new WebSocket({ server: server });
-
   app.get("/*", (_, res) => res.sendFile(INDEX_HTML_PATH));
   server.on("request", app);
 
@@ -55,12 +52,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
 
   let sessions = [];
 
-  // wss.on("connection", (ws) => {
-  //   ws.on("message", (message) => {
-  //     console.log(JSON.parse(message));
-  //     handleMessage(JSON.parse(message), ws);
-  //   });
-  // });
   io.on("connection", (ws) => {
     ws.on("message", (message) => {
       console.log(JSON.parse(message));
@@ -70,7 +61,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
 
   const brodcastMessage = (data, users, ws) => {
     users.forEach((user) => {
-      // if (user.ws != ws) user.ws.send(JSON.stringify(data));
       if (user.ws != ws) user.ws.emit("message", JSON.stringify(data));
     });
   };
@@ -139,14 +129,6 @@ module.exports = function startYoutubeTogetherServer(httpsConfig, port) {
           latestEvent: session.latestEvent,
         })
       );
-      // ws.send(
-      //   JSON.stringify({
-      //     event: "join",
-      //     videoID: session.videoID,
-      //     users: totalusers,
-      //     latestEvent: session.latestEvent,
-      //   })
-      // );
       brodcastMessage(
         {
           event: "users",

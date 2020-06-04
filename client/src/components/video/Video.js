@@ -48,9 +48,6 @@ const Video = (props) => {
 
   useEffect(() => {
     props.socket.on("message", (event) => {
-      // props.socket.addEventListener("message", (event) => {
-      console.log("foosh", event, typeof event);
-      // let data = JSON.parse(event.data);
       let data = JSON.parse(event);
       if (data.event === "speaker") {
         setIsSpeakerState(false);
@@ -137,7 +134,6 @@ const Video = (props) => {
   };
 
   const onStateChange = (event) => changeState(event.data);
-  // const sync = () => props.socket.send(currentStatus());
   const sync = () => props.socket.emit("message", currentStatus());
   const seekTo = (second) => player.seekTo(second, true);
   const pauseVideo = () => player.pauseVideo();
@@ -148,14 +144,6 @@ const Video = (props) => {
     let currTime = player.getCurrentTime();
     updateTimeRef.current = null;
 
-    // props.socket.send(
-    //   JSON.stringify({
-    //     event: "sync",
-    //     action: "pause",
-    //     currentTime: currTime,
-    //     timestamp: timestamp,
-    //   })
-    // );
     props.socket.emit(
       "message",
       JSON.stringify({
@@ -197,12 +185,6 @@ const Video = (props) => {
     if (!isSpeakerState) {
       setIsSpeakerState(true);
       player.unMute();
-      // props.socket.send(
-      //   JSON.stringify({
-      //     event: "speaker",
-      //     action: "update",
-      //   })
-      // );
       props.socket.emit(
         "message",
         JSON.stringify({
