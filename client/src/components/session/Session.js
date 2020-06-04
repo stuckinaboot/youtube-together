@@ -9,9 +9,8 @@ const Session = (props) => {
 
   const url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`;
   const socket = socketIOClient(url);
-  console.log("hit this shit", socket, url);
-  let sessID = props.sessionID;
 
+  let sessID = props.sessionID;
   let { sessionID, leaderName } = useParams();
 
   if (!sessID) {
